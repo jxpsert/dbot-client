@@ -1,0 +1,121 @@
+html {
+    scroll-behavior: smooth;
+}
+body {
+    padding: 0;
+    margin: 0;
+    font-family: Verdana;
+}
+#serverBar {
+    background-color: #202225;
+    width: 5%;
+    left: 0;
+    height: 100%;
+    position: fixed;
+    z-index: 0;
+}
+#channelBar {
+    background-color: #2F3136;
+    width: 17.5%;
+    left: 5%;
+    height: 100%;
+    position: fixed;
+    z-index: 0;
+}
+#memberBar {
+    background-color: #2F3136;
+    width: 17.5%;
+    left: 82.5%;
+    height: 100%;
+    position: fixed;
+    z-index: 0;
+}
+#chatWindow {
+    width: 60%;
+    left: 22.5%;
+    height: 100%;
+    position: fixed;
+    z-index: 0;
+    margin: 0.5%;
+    text-align: center;
+}
+#topBar {
+    z-index: 2;
+    width: 100%;
+    position: fixed;
+    height: 2%;
+}
+#chat {
+    list-style: none;
+    width: 100%;
+}
+#chat li div{
+    width: 80%;
+    color: white;
+    text-align: left;
+}
+#chat li div .messageName {
+    color: white;
+    font-weight: 600;
+}
+#chat li div .messageDate {
+    padding-left: 5px;
+    color: grey;
+    font-size: 10px;
+}
+#chat li div .messageContent {
+    padding-top: 15px;
+    font-size: 13px;
+}
+#chat li div .messageContent::before {
+    white-space: pre;
+    content: "\A";
+}
+a {
+    color: auto;
+    text-decoration: auto;
+}
+.chatMessage {
+    margin-top: 10px;
+    padding: 15px;
+    border-radius: 15px;
+    transition: 0.2s;
+    width: 85%;
+}
+.messageIcon {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    padding-right: 5px;
+}
+.messageName{
+    line-height: 25px;
+}
+.chatMessage:hover {
+    background-color: #32353B;
+}
+#chatName {
+    padding-left: 20px;
+    text-align: left;
+    color: white;
+}
+.channelHash {
+    color: grey;
+    padding-right: 10px;
+}
+.listChannel {
+    color: white;
+    padding: 10px;
+    border-radius: 15px;
+}
+.listChannel:hover {
+    background-color: #393C43;
+}
+#channels {
+    list-style: none;
+    width: 98%;
+    left: 0;
+}
+#servers {
+    list-style: none;
+}

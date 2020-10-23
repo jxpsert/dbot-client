@@ -1,0 +1,33 @@
+{
+  "name": "djsbotclient",
+  "version": "1.0.0",
+  "description": "Discord client for bots",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jxpsert/dbot-client.git"
+  },
+  "keywords": [
+    "discord",
+    "djs",
+    "electron",
+    "client",
+    "bot"
+  ],
+  "author": "jxpsert",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jxpsert/dbot-client/issues"
+  },
+  "homepage": "https://github.com/jxpsert/dbot-client#readme",
+  "dependencies": {
+    "discord.js": "^12.3.1"
+  },
+  "devDependencies": {
+    "electron": "^10.1.4"
+  }
+}

@@ -1,0 +1,111 @@
+<html>
+
+<head>
+    <title>Discord Bot Client</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<script>
+    const Discord = require('discord.js');
+    const Config = require('../config.json');
+    const Client = new Discord.Client();
+    Client.login(Config.Token);
+</script>
+<body>
+    <div id="topBar"></div>
+    <div id="serverBar">
+        <ol id="servers">
+            <li class="listServer">
+                <img width="75%" style="border-radius: 50%;">
+            </li>
+        </ol>
+        <script>
+            let serverList = document.getElementById('servers');
+
+            Client.guilds.cache.forEach(guild => {
+                let newItem = document.createElement('li');
+                let newIcon = document.createElement('img');
+                newItem.appendChild('newIcon');
+                newIcon.src = guild.iconURL({dynamic: true});
+                newIcon.width = "75%";
+                newIcon.style.borderRadius = "50%";
+                newItem.id = guild.id;
+
+                serverList.appendChild(newItem);
+            });
+        </script>
+    </div>
+    <div id="channelBar">
+        <ol id="channels">
+            <li class="listChannel">
+                <span class="channelHash">#</span><span id="3144214141515322" class="channelName">general</span>
+            </li>
+        </ol>
+    </div>
+    <div id="chatWindow">
+        <h3 id="chatName">#channel-name</h3>
+        <ol id="chat">
+            <li class="chatMessage"><div>
+                <img class="messageIcon">
+                <span class="messageName">japsert</span><span class="messageDate">Today at 1:00AM</span>
+                <span class="messageContent">Sup noobs</span>
+            </div></li>
+            <script>
+                Client.on('message', msg => {
+
+                    if(!document.getElementById(msg.guild.id)){
+                        let newItem = document.createElement('li');
+                        let newIcon = document.createElement('img');
+                        newItem.appendChild('newIcon');
+                        newIcon.src = msg.guild.iconURL({dynamic: true});
+                        newIcon.width = "75%";
+                        newIcon.style.borderRadius = "50%";
+                        newItem.id = msg.guild.id;
+
+                        serverList.appendChild(newItem);
+                    }
+
+                    let chatList = document.getElementById('chat');
+
+                    let newMessage = document.createElement('li');
+                    let newMessageDiv = document.createElement('div');
+                    newMessage.appendChild(newMessageDiv);
+                    newMessage.classList.add('chatMessage');
+
+                    let newMessageIcon = document.createElement('img');
+                    newMessageIcon.src = msg.author.displayAvatarURL({dynamic: true});
+                    newMessageIcon.classList.add('messageIcon');
+
+                    let newMessageName = document.createElement('span');
+                    let newMessageNameText = document.createTextNode(msg.author.tag);
+                    newMessageName.appendChild(newMessageNameText);
+                    newMessageName.classList.add('messageName');
+
+                    let newMessageDate = document.createElement('span');
+                    let newMessageDateText = document.createTextNode(msg.createdAt.toDateString());
+                    newMessageDate.appendChild(newMessageDateText);
+                    newMessageDate.classList.add('messageDate');
+
+                    let newMessageContent = document.createElement('span');
+                    let newMessageContentText = document.createTextNode(msg.content);
+                    newMessageContent.appendChild(newMessageContentText);
+                    newMessageContent.classList.add('messageContent');
+
+                    newMessageDiv.appendChild(newMessageIcon);
+                    newMessageDiv.appendChild(newMessageName);
+                    newMessageDiv.appendChild(newMessageDate);
+                    newMessageDiv.appendChild(newMessageContent);
+
+                    chatList.appendChild(newMessage);
+
+                    let messages = document.querySelectorAll('.chatMessage');
+                    let lastMessage = messages[messages.length - 1];
+                    if (!chatList.matches(':hover')) { // If the mouse is not over the list
+                        lastMessage.scrollIntoView() // Scroll to the lowest item
+                    }
+                })
+            </script>
+        </ol>
+    </div>
+    <div id="memberBar"></div>
+</body>
+</html>
