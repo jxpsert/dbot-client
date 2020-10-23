@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 html {
     scroll-behavior: smooth;
-    font-family: 'Open Sans';
 }
 body {
     padding: 0;
     margin: 0;
+}
+body, a, h1, h2, h3, h4, h5, h6, span, p, input, button {
     font-family: 'Open Sans';
 }
 #serverBar {
@@ -54,9 +55,8 @@ body {
     width: 100%;
     overflow-y: scroll;
     height: 85%;
+    overflow-x: hidden;
 }
-
-
 
 #chat li div{
     width: 80%;
@@ -73,7 +73,7 @@ body {
     font-size: 10px;
 }
 #chat li div .messageContent {
-    padding-top: 15px;
+    padding-top: 40px;
     font-size: 13px;
 }
 #chat li div .messageContent::before {
@@ -175,11 +175,11 @@ a {
     width: 50px;
 }
 .listServer img:hover {
-    background-color: rgba(255,255,255,0.5);
+    background-color: rgba(78, 93, 148,0.75);
     cursor: pointer;
 }
 .listServerSelected img {
-    background-color: rgba(255,255,255,0.5);
+    background-color: rgba(78, 93, 148,0.75);
 }
 .listServerSelected:hover {
     cursor: pointer;
@@ -250,4 +250,9 @@ a {
 }
 .newMemberName:hover {
     cursor: pointer;
+}
+.messageImage {
+    margin-top: 10px;
+    width: 35%;
+    float: left;
 }

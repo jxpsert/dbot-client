@@ -11,6 +11,9 @@ function createWindow(){ // Startup function
     });
     win.loadFile('./html/main.html'); // Load the page
     win.removeMenu(); // Removing the "File", "Edit" etc bar
+    win.webContents.on('did-finish-load', () => {
+        win.setTitle(`Discord Bot Client v${require('./package.json').version} | ${require('./package.json').repository.url.substring(4, require('./package.json').repository.url.length-4)}`);
+    })
     // win.webContents.openDevTools();
 }
 app.whenReady().then(createWindow);

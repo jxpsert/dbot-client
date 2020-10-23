@@ -28,6 +28,7 @@
                 newIcon.src = guild.iconURL({dynamic: true}) || "https://discordapp.com/assets/322c936a8c8be1b803cd94861bdfa868.png"; // Guild icon or default Discord image
                 newItem.classList.add('listServer'); // Add the class
                 newItem.id = guild.id; // Set ID for future reference
+                newIcon.title = guild.name; // Hover text
                 newItem.onclick = function() { selectGuild(guild.id) }; // Set the function to select it
 
                 serverList.appendChild(newItem); // Add to the list
@@ -137,7 +138,7 @@
 
             Client.guilds.cache.get(guildId).channels.cache.forEach(channel => {
                 if(channel.type == 'voice' || channel.type == 'dm' || channel.type == 'category') return;
-                Client.guilds.cache.get(selectedGuildID).channels.cache.get(channel.id).messages.fetch(5);
+                Client.guilds.cache.get(selectedGuildID).channels.cache.get(channel.id).messages.fetch({limit: 5});
                 let newItem = document.createElement('li');
                 newItem.classList.add('listChannel');
                 let newItemSpanHash = document.createElement('span');
@@ -194,6 +195,18 @@
                     newMessageContent.appendChild(newMessageContentText);
                     newMessageContent.classList.add('messageContent');
 
+                    if(msg.attachments.first()){
+                        let newMessageImage = document.createElement('img');
+                        newMessageImage.src = msg.attachments.first().url;
+                        newMessageImage.classList.add('messageImage');
+
+                        newMessage.appendChild(newMessageImage);
+                    }
+
+                    if(msg.embeds[0]){
+                        newMessageContent.innerHTML += "\n\n[Embed]";
+                    }
+
                     newMessageDiv.appendChild(newMessageIcon);
                     newMessageDiv.appendChild(newMessageName);
                     newMessageDiv.appendChild(newMessageDate);
@@ -226,7 +239,7 @@
                     newMemberIcon.style.backgroundColor = "grey";
                     break;
                 case 'idle':
-                    newMemberIcon.style.backgroundColor = "yellow";
+                    newMemberIcon.style.backgroundColor = "orange";
                     break;
             }
 
