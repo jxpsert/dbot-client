@@ -196,6 +196,7 @@
                     newMessageContent.classList.add('messageContent');
 
                     if(msg.attachments.first()){
+                        if(!msg.attachments.first().width) return;
                         let newMessageImage = document.createElement('img');
                         newMessageImage.src = msg.attachments.first().url;
                         newMessageImage.classList.add('messageImage');
