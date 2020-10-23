@@ -1,1 +1,7 @@
-tryna make a bot client
+A client for bots.
+
+To install
+``npm install``
+
+To start
+``npm start``
