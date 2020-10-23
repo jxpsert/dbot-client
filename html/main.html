@@ -21,6 +21,11 @@
         <script>
             let serverList = document.getElementById('servers');
             Client.on('ready', () => {
+                selectedGuildID = "";
+                selectedChannelID = "";
+
+                serverList.innerHTML = '';
+
                 Client.guilds.cache.forEach(guild => { // Adding all guilds
                 let newItem = document.createElement('li'); // Create new list item
                 let newIcon = document.createElement('img'); // Create new image element
@@ -37,7 +42,7 @@
         </script>
     </div>
     <div id="channelBar">
-        <h2 id="currentGuildName">SELECT A GUILD</h2>
+        <h4 id="currentGuildName">SELECT A GUILD</h4>
         <ol id="channels">
         </ol>
     </div>
@@ -169,6 +174,7 @@
             })
         }
         function newMessage(msg) {
+            if(msg.system) return;
             let chatList = document.getElementById('chat');
             let newMessage = document.createElement('li');
                     let newMessageDiv = document.createElement('div');
@@ -191,7 +197,8 @@
                     newMessageDate.classList.add('messageDate');
 
                     let newMessageContent = document.createElement('span');
-                    let newMessageContentText = document.createTextNode(msg.content);
+                    let newMessageContentText = document.createTextNode( msg.content);
+                    newMessageContent.appendChild(document.createElement('br'));
                     newMessageContent.appendChild(newMessageContentText);
                     newMessageContent.classList.add('messageContent');
 
@@ -247,6 +254,11 @@
             if(member.user.bot) newMemberName.style.backgroundColor = "rgba(114,137,218,0.5)";
             if(member.id == member.guild.owner.id) newMemberName.style.backgroundColor = "rgba(204,164,61,0.5)";
             if(member.hasPermission("ADMINISTRATOR") && member.id !== member.guild.owner.id && !member.user.bot) newMemberName.style.backgroundColor = "rgba(128,0,0,0.5)";
+            
+            Client.fetchApplication().then(app => {
+                if(member.id == app.owner.id) newMemberName.style.backgroundColor = "rgba(205,246,146,0.5)";
+            });
+
             newMember.appendChild(newMemberIcon);
             newMember.appendChild(newMemberName);
 
