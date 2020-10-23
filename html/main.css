@@ -1,10 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
 html {
     scroll-behavior: smooth;
+    font-family: 'Open Sans';
 }
 body {
     padding: 0;
     margin: 0;
-    font-family: Verdana;
+    font-family: 'Open Sans';
 }
 #serverBar {
     background-color: #202225;
@@ -46,9 +48,16 @@ body {
     height: 2%;
 }
 #chat {
+    display: flex;
+    flex-direction: column;
     list-style: none;
     width: 100%;
+    overflow-y: scroll;
+    height: 85%;
 }
+
+
+
 #chat li div{
     width: 80%;
     color: white;
@@ -87,9 +96,13 @@ a {
     height: 25px;
     border-radius: 50%;
     padding-right: 5px;
+    vertical-align: middle;
 }
 .messageName{
     line-height: 25px;
+}
+.messageName:hover {
+    cursor: pointer;
 }
 .chatMessage:hover {
     background-color: #32353B;
@@ -106,16 +119,135 @@ a {
 .listChannel {
     color: white;
     padding: 10px;
+    text-align: left;
+    position: flex;
     border-radius: 15px;
 }
 .listChannel:hover {
     background-color: #393C43;
+    cursor: pointer;
+}
+.listChannelSelected {
+    background-color: #393C43;
+    color: white;
+    padding: 10px;
+    text-align: left;
+    position: flex;
+    border-radius: 15px;
+}
+.listChannelSelected:hover {
+    cursor: pointer;
 }
 #channels {
     list-style: none;
     width: 98%;
     left: 0;
+    overflow-y: scroll;
+    height: 90%;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+#channels::-webkit-scrollbar {
+    display: none;
 }
 #servers {
     list-style: none;
+    left: 5px;
+    overflow-y: scroll;
+    height: 90%; 
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+#servers::-webkit-scrollbar {
+    display: none;
+}
+.listServer {
+    text-align: left;
+    padding-left: 5px;
+    position: flex;
+    width: 95%;
+    left: 0;
+}
+.listServer img {
+    border-radius: 50%;
+    transition: 0.2s;
+    padding: 5px;
+    width: 50px;
+}
+.listServer img:hover {
+    background-color: rgba(255,255,255,0.5);
+    cursor: pointer;
+}
+.listServerSelected img {
+    background-color: rgba(255,255,255,0.5);
+}
+.listServerSelected:hover {
+    cursor: pointer;
+}
+#currentGuildName {
+    color: white;
+    padding-left: 15px;
+}
+#textBar {
+    background-color: #40444B;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    width: 50%;
+    bottom: 5px;
+    position: fixed;
+    left: 23%;
+}
+#textBar:focus {
+    outline: 0;
+    outline-color: transparent;
+    outline-style: none;
+}
+#sendmessage {
+    background-color: #101011;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    width: auto;
+    bottom: 5px;
+    position: fixed;
+    left: 75%;
+}
+#sendmessage:focus {
+    outline: 0;
+    outline-color: transparent;
+    outline-style: none;
+}
+#sendmessage:hover {
+    cursor: pointer;
+}
+#members {
+    list-style: none;
+    color: white;
+    overflow-y: scroll;
+    height: 90%;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.newMemberIcon {
+    border-radius: 50%;
+    transition: 0.2s;
+    padding: 2px;
+    width: 30px;
+    background-color: grey;
+    margin-bottom: 10px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+#members::-webkit-scrollbar {
+    display: none;
+}
+#memberamount {
+    margin-left: 15px;
+    color: white;
+}
+#newMemberName:hover {
+    cursor: pointer;
 }

@@ -11,7 +11,7 @@ function createWindow(){ // Startup function
     });
     win.loadFile('./html/main.html'); // Load the page
     win.removeMenu(); // Removing the "File", "Edit" etc bar
-    win.webContents.openDevTools();
+   // win.webContents.openDevTools();
 }
 app.whenReady().then(createWindow);
 

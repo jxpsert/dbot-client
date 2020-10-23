@@ -9,64 +9,167 @@
     const Config = require('../config.json');
     const Client = new Discord.Client();
     Client.login(Config.Token);
+
+    let selectedGuildID = "";
+    let selectedChannelID = "";
 </script>
 <body>
     <div id="topBar"></div>
     <div id="serverBar">
         <ol id="servers">
-            <li class="listServer">
-                <img width="75%" style="border-radius: 50%;">
-            </li>
         </ol>
         <script>
             let serverList = document.getElementById('servers');
-
-            Client.guilds.cache.forEach(guild => {
+            Client.on('ready', () => {
+                Client.guilds.cache.forEach(guild => {
                 let newItem = document.createElement('li');
                 let newIcon = document.createElement('img');
-                newItem.appendChild('newIcon');
-                newIcon.src = guild.iconURL({dynamic: true});
-                newIcon.width = "75%";
-                newIcon.style.borderRadius = "50%";
+                newItem.appendChild(newIcon);
+                newIcon.src = guild.iconURL({dynamic: true}) || "https://discordapp.com/assets/322c936a8c8be1b803cd94861bdfa868.png";
+                newItem.classList.add('listServer');
                 newItem.id = guild.id;
+                newItem.onclick = function() { selectGuild(guild.id) };
 
                 serverList.appendChild(newItem);
             });
+            })
         </script>
     </div>
     <div id="channelBar">
+        <h2 id="currentGuildName">SELECT A GUILD</h2>
         <ol id="channels">
-            <li class="listChannel">
-                <span class="channelHash">#</span><span id="3144214141515322" class="channelName">general</span>
-            </li>
         </ol>
     </div>
     <div id="chatWindow">
         <h3 id="chatName">#channel-name</h3>
         <ol id="chat">
-            <li class="chatMessage"><div>
-                <img class="messageIcon">
-                <span class="messageName">japsert</span><span class="messageDate">Today at 1:00AM</span>
-                <span class="messageContent">Sup noobs</span>
-            </div></li>
             <script>
                 Client.on('message', msg => {
-
-                    if(!document.getElementById(msg.guild.id)){
-                        let newItem = document.createElement('li');
-                        let newIcon = document.createElement('img');
-                        newItem.appendChild('newIcon');
-                        newIcon.src = msg.guild.iconURL({dynamic: true});
-                        newIcon.width = "75%";
-                        newIcon.style.borderRadius = "50%";
-                        newItem.id = msg.guild.id;
-
-                        serverList.appendChild(newItem);
-                    }
+                    if(msg.channel.id !== selectedChannelID) return;
 
                     let chatList = document.getElementById('chat');
 
-                    let newMessage = document.createElement('li');
+                    newMessage(msg);
+
+                    let messages = document.querySelectorAll('.chatMessage');
+                    let lastMessage = messages[messages.length - 1];
+                        lastMessage.scrollIntoView() // Scroll to the lowest item
+
+                })
+            </script>
+        </ol>
+        <input type="text" id="textBar">
+        <button id="sendmessage" onclick="sendMessage()">SEND</button>
+        <script>
+            let textBar = document.getElementById('textBar');
+            textBar.addEventListener('keyup', function(event){
+                if(event.keyCode !== 13) return;
+                sendMessage();
+            })
+
+            function sendMessage() {
+                if(!selectedGuildID || !selectedChannelID) return;
+                let channel = Client.guilds.cache.get(selectedGuildID).channels.cache.get(selectedChannelID);
+                let text = document.getElementById('textBar').value;
+                if(text.length < 1) return;
+                channel.send(text);
+                document.getElementById('textBar').value = '';
+            }
+        </script>
+    </div>
+    <div id="memberBar">
+        <h3 id="memberamount">Members (0)</h3>
+        <ol id="members">
+        </ol>
+    </div>
+    <script>
+        let chatList = document.getElementById('chat');
+
+        function selectGuild(id) {
+            let theGuild = document.getElementById(id);
+            let guildName = document.getElementById('currentGuildName');
+            let formerGuild = document.querySelectorAll('.listServerSelected')[0];
+            if(formerGuild) formerGuild.classList.remove('listServerSelected');
+            theGuild.classList.add('listServerSelected');
+            selectedGuildID = id;
+            guildName.innerHTML = Client.guilds.cache.get(id).name;
+
+            let channels = document.getElementById('channels');
+            channels.innerHTML = '';
+
+            chatList.innerHTML = '';
+
+            let memberList = document.getElementById('members');
+            memberList.innerHTML = '';
+
+            document.getElementById('memberamount').innerHTML = `Members: (0)`;
+
+            document.getElementById('chatName').innerHTML = "#none-selected";
+
+            loadChannels(id);
+        }
+        function selectChannel(id) {
+            let theChannel = document.getElementById(id);
+            let channelName = document.getElementById('chatName');
+            let formerChannel = document.querySelectorAll('.listChannelSelected')[0];
+            if(formerChannel) formerChannel.classList.remove('listChannelSelected');
+            theChannel.classList.add('listChannelSelected');
+            selectedChannelID = id;
+            let channel = Client.guilds.cache.get(selectedGuildID).channels.cache.get(id);
+            channelName.innerHTML = "#" + channel.name;
+
+            chatList.innerHTML = '';
+
+            let memberList = document.getElementById('members');
+            memberList.innerHTML = '';
+
+            Client.guilds.cache.get(selectedGuildID).members.cache.filter(m => channel.permissionsFor(m).has('VIEW_CHANNEL')).forEach(member => {
+                newMember(member);
+            });
+            let amountOfMembers = Client.guilds.cache.get(selectedGuildID).members.cache.filter(m => channel.permissionsFor(m).has('VIEW_CHANNEL')).size;
+
+            document.getElementById('memberamount').innerHTML = `Members: (${amountOfMembers})`;
+
+            loadMessages(id);
+        }
+        function loadChannels(guildId) {
+            let channels = document.getElementById('channels');
+
+            Client.guilds.cache.get(guildId).channels.cache.forEach(channel => {
+                if(channel.type == 'voice' || channel.type == 'dm' || channel.type == 'category') return;
+                Client.guilds.cache.get(selectedGuildID).channels.cache.get(channel.id).messages.fetch(5);
+                let newItem = document.createElement('li');
+                newItem.classList.add('listChannel');
+                let newItemSpanHash = document.createElement('span');
+                let newItemSpanName = document.createElement('span');
+
+                newItemSpanHash.classList.add('channelHash');
+                newItemSpanHash.appendChild(document.createTextNode('#'));
+
+                newItemSpanName.classList.add('channelName');
+                newItemSpanName.appendChild(document.createTextNode(channel.name));
+
+                newItem.id = channel.id;
+                newItem.onclick = function() { selectChannel(channel.id) };
+
+                newItem.appendChild(newItemSpanHash);
+                newItem.appendChild(newItemSpanName);
+
+                channels.appendChild(newItem);
+            });
+        }
+        function loadMessages(channelId) {
+            
+            Client.guilds.cache.get(selectedGuildID).channels.cache.get(channelId).messages.cache.sort((a, b) => a.createdTimestamp - b.createdTimestamp).forEach(msg => {
+                    newMessage(msg);
+                    let messages = document.querySelectorAll('.chatMessage');
+                    let lastMessage = messages[messages.length - 1];
+                    lastMessage.scrollIntoView() // Scroll to the lowest item
+            })
+        }
+        function newMessage(msg) {
+            let chatList = document.getElementById('chat');
+            let newMessage = document.createElement('li');
                     let newMessageDiv = document.createElement('div');
                     newMessage.appendChild(newMessageDiv);
                     newMessage.classList.add('chatMessage');
@@ -79,6 +182,7 @@
                     let newMessageNameText = document.createTextNode(msg.author.tag);
                     newMessageName.appendChild(newMessageNameText);
                     newMessageName.classList.add('messageName');
+                    newMessageName.onclick = function(){ mentionMember(msg.author.id) };
 
                     let newMessageDate = document.createElement('span');
                     let newMessageDateText = document.createTextNode(msg.createdAt.toDateString());
@@ -96,16 +200,43 @@
                     newMessageDiv.appendChild(newMessageContent);
 
                     chatList.appendChild(newMessage);
+        }
+        function newMember(member) {
+            let memberList = document.getElementById('members');
+            let newMember = document.createElement('li');
 
-                    let messages = document.querySelectorAll('.chatMessage');
-                    let lastMessage = messages[messages.length - 1];
-                    if (!chatList.matches(':hover')) { // If the mouse is not over the list
-                        lastMessage.scrollIntoView() // Scroll to the lowest item
-                    }
-                })
-            </script>
-        </ol>
-    </div>
-    <div id="memberBar"></div>
+            let newMemberIcon = document.createElement('img');
+            newMemberIcon.src = member.user.displayAvatarURL({dynamic: true});
+            newMemberIcon.classList.add('newMemberIcon');
+
+            let newMemberName = document.createElement('span');
+            newMemberNameText = document.createTextNode(member.user.tag);
+            newMemberName.appendChild(newMemberNameText);
+            newMemberName.onclick = function(){ mentionMember(msg.author.id) };
+
+            switch(member.user.presence.status){
+                case 'online':
+                    newMemberIcon.style.backgroundColor = "green";
+                    break;
+                case 'dnd':
+                    newMemberIcon.style.backgroundColor = "red";
+                    break;
+                case 'offline':
+                    newMemberIcon.style.backgroundColor = "grey";
+                    break;
+                case 'idle':
+                    newMemberIcon.style.backgroundColor = "yellow";
+                    break;
+            }
+
+            newMember.appendChild(newMemberIcon);
+            newMember.appendChild(newMemberName);
+
+            memberList.appendChild(newMember);
+        }
+        function mentionMember(id){
+            textBar.value += `<@${id}>`;
+        }
+    </script>
 </body>
 </html>
