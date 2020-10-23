@@ -256,3 +256,7 @@ a {
     width: 35%;
     float: left;
 }
+.newMemberName {
+    border-radius: 15px;
+    padding: 7px;
+}

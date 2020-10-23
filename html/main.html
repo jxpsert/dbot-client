@@ -204,7 +204,7 @@
                     }
 
                     if(msg.embeds[0]){
-                        newMessageContent.innerHTML += "\n\n[Embed]";
+                        newMessageContent.innerHTML += "<br>[Embed]";
                     }
 
                     newMessageDiv.appendChild(newMessageIcon);
@@ -243,6 +243,9 @@
                     break;
             }
 
+            if(member.user.bot) newMemberName.style.backgroundColor = "rgba(114,137,218,0.5)";
+            if(member.id == member.guild.owner.id) newMemberName.style.backgroundColor = "rgba(204,164,61,0.5)";
+            if(member.hasPermission("ADMINISTRATOR") && member.id !== member.guild.owner.id && !member.user.bot) newMemberName.style.backgroundColor = "rgba(128,0,0,0.5)";
             newMember.appendChild(newMemberIcon);
             newMember.appendChild(newMemberName);
 
