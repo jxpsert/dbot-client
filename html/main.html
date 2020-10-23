@@ -136,6 +136,13 @@
 
             document.getElementById('memberamount').innerHTML = `Members: (${members.size})`; // Set membercount
 
+            if(!channel.permissionsFor(channel.guild.me).has('SEND_MESSAGES')) document.getElementById('textBar').disabled = true;
+            if(channel.permissionsFor(channel.guild.me).has('SEND_MESSAGES')) document.getElementById('textBar').disabled = false;
+
+            document.getElementById('textBar').placeholder = `Message #${channel.name}`;
+
+            if(!channel.permissionsFor(channel.guild.me).has('SEND_MESSAGES')) document.getElementById('textBar').placeholder = 'You cannot send messages here.';
+
             loadMessages(id); // Get the new channel's messages
         }
         function loadChannels(guildId) {
