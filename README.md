@@ -1,7 +1,7 @@
 A client for bots.
 
 To install
-``npm install``
+```npm install```
 
 To start
-``npm start``
+```npm start```
