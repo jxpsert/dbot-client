@@ -248,6 +248,6 @@ a {
     margin-left: 15px;
     color: white;
 }
-#newMemberName:hover {
+.newMemberName:hover {
     cursor: pointer;
 }

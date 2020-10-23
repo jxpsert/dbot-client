@@ -21,16 +21,16 @@
         <script>
             let serverList = document.getElementById('servers');
             Client.on('ready', () => {
-                Client.guilds.cache.forEach(guild => {
-                let newItem = document.createElement('li');
-                let newIcon = document.createElement('img');
-                newItem.appendChild(newIcon);
-                newIcon.src = guild.iconURL({dynamic: true}) || "https://discordapp.com/assets/322c936a8c8be1b803cd94861bdfa868.png";
-                newItem.classList.add('listServer');
-                newItem.id = guild.id;
-                newItem.onclick = function() { selectGuild(guild.id) };
+                Client.guilds.cache.forEach(guild => { // Adding all guilds
+                let newItem = document.createElement('li'); // Create new list item
+                let newIcon = document.createElement('img'); // Create new image element
+                newItem.appendChild(newIcon); // Put image in list item
+                newIcon.src = guild.iconURL({dynamic: true}) || "https://discordapp.com/assets/322c936a8c8be1b803cd94861bdfa868.png"; // Guild icon or default Discord image
+                newItem.classList.add('listServer'); // Add the class
+                newItem.id = guild.id; // Set ID for future reference
+                newItem.onclick = function() { selectGuild(guild.id) }; // Set the function to select it
 
-                serverList.appendChild(newItem);
+                serverList.appendChild(newItem); // Add to the list
             });
             })
         </script>
@@ -47,14 +47,13 @@
                 Client.on('message', msg => {
                     if(msg.channel.id !== selectedChannelID) return;
 
-                    let chatList = document.getElementById('chat');
+                    let chatList = document.getElementById('chat'); // Get the chat list
 
-                    newMessage(msg);
+                    newMessage(msg); // Add message
 
-                    let messages = document.querySelectorAll('.chatMessage');
-                    let lastMessage = messages[messages.length - 1];
-                        lastMessage.scrollIntoView() // Scroll to the lowest item
-
+                    let messages = document.querySelectorAll('.chatMessage'); // All messages in the window
+                    let lastMessage = messages[messages.length - 1]; // Get the last message
+                    lastMessage.scrollIntoView() // Scroll to the lowest item
                 })
             </script>
         </ol>
@@ -92,21 +91,21 @@
             if(formerGuild) formerGuild.classList.remove('listServerSelected');
             theGuild.classList.add('listServerSelected');
             selectedGuildID = id;
-            guildName.innerHTML = Client.guilds.cache.get(id).name;
+            guildName.innerHTML = Client.guilds.cache.get(id).name; // Set the name
 
             let channels = document.getElementById('channels');
-            channels.innerHTML = '';
+            channels.innerHTML = ''; // Clear all previous channels
 
-            chatList.innerHTML = '';
+            chatList.innerHTML = ''; // Clear the chat
 
             let memberList = document.getElementById('members');
-            memberList.innerHTML = '';
+            memberList.innerHTML = ''; // Clear all members from previous channel
 
-            document.getElementById('memberamount').innerHTML = `Members: (0)`;
+            document.getElementById('memberamount').innerHTML = `Members: (0)`; // Set membercount to 0
 
-            document.getElementById('chatName').innerHTML = "#none-selected";
+            document.getElementById('chatName').innerHTML = "#none-selected"; // Reset channel name
 
-            loadChannels(id);
+            loadChannels(id); // Get the new guild's channels
         }
         function selectChannel(id) {
             let theChannel = document.getElementById(id);
@@ -114,23 +113,24 @@
             let formerChannel = document.querySelectorAll('.listChannelSelected')[0];
             if(formerChannel) formerChannel.classList.remove('listChannelSelected');
             theChannel.classList.add('listChannelSelected');
-            selectedChannelID = id;
+            selectedChannelID = id; // Set the new ID to get members from
             let channel = Client.guilds.cache.get(selectedGuildID).channels.cache.get(id);
             channelName.innerHTML = "#" + channel.name;
 
-            chatList.innerHTML = '';
+            chatList.innerHTML = ''; // Clear chat from previous channel
 
             let memberList = document.getElementById('members');
-            memberList.innerHTML = '';
+            memberList.innerHTML = ''; // Clear members from previous channel
 
-            Client.guilds.cache.get(selectedGuildID).members.cache.filter(m => channel.permissionsFor(m).has('VIEW_CHANNEL')).forEach(member => {
+            
+            let members = Client.guilds.cache.get(selectedGuildID).members.cache.filter(m => channel.permissionsFor(m).has('VIEW_CHANNEL'));  // Filter on members who can see the channel
+            members.forEach(member => {
                 newMember(member);
             });
-            let amountOfMembers = Client.guilds.cache.get(selectedGuildID).members.cache.filter(m => channel.permissionsFor(m).has('VIEW_CHANNEL')).size;
 
-            document.getElementById('memberamount').innerHTML = `Members: (${amountOfMembers})`;
+            document.getElementById('memberamount').innerHTML = `Members: (${members.size})`; // Set membercount
 
-            loadMessages(id);
+            loadMessages(id); // Get the new channel's messages
         }
         function loadChannels(guildId) {
             let channels = document.getElementById('channels');
@@ -212,7 +212,8 @@
             let newMemberName = document.createElement('span');
             newMemberNameText = document.createTextNode(member.user.tag);
             newMemberName.appendChild(newMemberNameText);
-            newMemberName.onclick = function(){ mentionMember(msg.author.id) };
+            newMemberName.onclick = function(){ mentionMember(member.user.id) };
+            newMemberName.classList.add('newMemberName');
 
             switch(member.user.presence.status){
                 case 'online':
